@@ -56,7 +56,7 @@ def process_bib_file(input_file, output_file):
                 # Extract the last part of the DOI
                 last_part = doi.split(".")[-1]
                 # Append the page number to the BibTeX entry
-                entry['pages'] = last_part
+                entry['pages'] = last_part.title()
 
             # For other DOI fetch info from web.
             else:
