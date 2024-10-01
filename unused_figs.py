@@ -3,6 +3,7 @@
 import os
 import re
 import sys
+import argparse
 
 def get_pdf_files(directory, latex_pdf_file):
     """Get all PDF files in the specified directory, excluding the LaTeX-generated PDF."""
@@ -20,7 +21,7 @@ def get_used_figures(latex_file):
     return used_figures
 
 def find_unused_figures(latex_file):
-    """Find and print PDF files that are not used in the LaTeX file."""
+    """Find and return PDF files that are not used in the LaTeX file."""
     # Get the LaTeX-generated PDF file name (assumes the same base name as the LaTeX file)
     latex_pdf_file = os.path.basename(latex_file).replace('.tex', '.pdf')
     
@@ -33,6 +34,20 @@ def find_unused_figures(latex_file):
     # Compare the sets
     unused_figures = pdf_files - used_figures
 
+    return unused_figures
+
+def print_used_figures(latex_file):
+    """Print the used PDF figures in the LaTeX file."""
+    used_figures = get_used_figures(latex_file)
+    if used_figures:
+        for fig in used_figures:
+            print(fig)
+    else:
+        print("No PDF figures used in the LaTeX file.")
+
+def print_unused_figures(latex_file):
+    """Print the unused PDF figures in the LaTeX file."""
+    unused_figures = find_unused_figures(latex_file)
     if unused_figures:
         for fig in unused_figures:
             print(fig)
@@ -40,16 +55,21 @@ def find_unused_figures(latex_file):
         print("All PDF figures are used.")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python ",sys.argv[0]," <latex_file.tex>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Find used or unused PDF figures in a LaTeX file.")
+    parser.add_argument("latex_file", help="Path to the LaTeX file.")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--used", action="store_true", help="Print used PDF figures.")
+    group.add_argument("--unused", action="store_true", help="Print unused PDF figures.")
 
-    latex_file_path = sys.argv[1]
+    args = parser.parse_args()
 
     # Check if the LaTeX file exists
-    if not os.path.isfile(latex_file_path):
-        print(f"Error: The file '{latex_file_path}' does not exist.")
+    if not os.path.isfile(args.latex_file):
+        print(f"Error: The file '{args.latex_file}' does not exist.")
         sys.exit(1)
 
-    # Run the function
-    find_unused_figures(latex_file_path)
+    # Print used or unused figures based on the command-line option
+    if args.used:
+        print_used_figures(args.latex_file)
+    elif args.unused:
+        print_unused_figures(args.latex_file)
