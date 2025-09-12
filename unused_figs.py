@@ -13,7 +13,7 @@ def get_used_figures(latex_file):
     with open(latex_file, 'r') as file:
         content = file.read()
     
-    pattern = re.compile(r'\\includegraphics(?:\[.*?\])?{(.+?\.pdf)}')
+    pattern = re.compile(r'\\includegraphics(?:\[.*?\])?{(.+?\.(?:pdf|jpeg|jpg|png))}')
     used_figures = set(match.group(1) for match in pattern.finditer(content))
     
     return used_figures
@@ -73,7 +73,12 @@ def package_latex_project(latex_file, output_folder=None):
     
     if output_folder:
         for file in files_to_copy:
-            shutil.copy(file, os.path.join(output_folder, os.path.basename(file)))
+            # Ensure subfolders are preserved
+            dest_path = os.path.join(output_folder, file)
+            dest_dir = os.path.dirname(dest_path)
+            os.makedirs(dest_dir, exist_ok=True)
+            shutil.copy(file, dest_path)
+
         print(f"Files copied to folder: {output_folder}")
 
 if __name__ == "__main__":
