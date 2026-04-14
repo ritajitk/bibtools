@@ -31,7 +31,11 @@ journal_dict = {
     "Reports on Progress in Physics" : "Rep. Prog. Phys.",
     "Journal of Physics: Condensed Matter" : "J. Phys.: Condens. Matter",
     "Reports on Progress in physics" : "Rep. Prog. Phys.",
-    "Annual Review of Condensed Matter Physics" : "Annu. Rev. Condens. Matter Phys."
+    "Annual Review of Condensed Matter Physics" : "Annu. Rev. Condens. Matter Phys.",
+    "New Journal of Physics": "New J. Phys.",
+    "Journal of the Physical Society of Japan": "J. Phys. Soc. Jpn.",
+    "Journal of Physics C: Solid State Physics": "J. Phys. C: Solid State Phys.",
+    "Journal of Optics": "J Opt"
 }
 
 def capitalize_title_properly(text):
